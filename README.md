@@ -1,27 +1,6 @@
-In this DevOps task, you need to build and deploy a full-stack CRUD application using the MEAN stack (MongoDB, Express, Angular 15, and Node.js). The backend will be developed with Node.js and Express to provide REST APIs, connecting to a MongoDB database. The frontend will be an Angular application utilizing HTTPClient for communication.  
-
-The application will manage a collection of tutorials, where each tutorial includes an ID, title, description, and published status. Users will be able to create, retrieve, update, and delete tutorials. Additionally, a search box will allow users to find tutorials by title.
-
-## Project setup
-
-### Node.js Server
-
-cd backend
-
-npm install
-
-You can update the MongoDB credentials by modifying the `db.config.js` file located in `app/config/`.
-
-Run `node server.js`
-
-### Angular Client
-
-cd frontend
-
-npm install
-
-Run `ng serve --port 8081`
-
-You can modify the `src/app/services/tutorial.service.ts` file to adjust how the frontend interacts with the backend.
-
-Navigate to `http://localhost:8081/`
+<img width="1162" height="346" alt="Screenshot 2025-11-28 111903" src="https://github.com/user-attachments/assets/d792dce3-9d48-45f4-b3f1-90ece1bf55ac" />
+<img width="1619" height="457" alt="Screenshot 2025-11-28 152215" src="https://github.com/user-attachments/assets/f7225712-24d5-4a00-9335-474310747bc8" />
+<img width="1503" height="517" alt="Screenshot 2025-11-28 152307" src="https://github.com/user-attachments/assets/ec22dc64-efc8-4b1d-9826-b378e52db911" />
+<img width="1907" height="663" alt="Screenshot 2025-11-28 152433" src="https://github.com/user-attachments/assets/524ffd38-f1ae-4ddb-a506-b5d3f9589de2" />
+<img width="1900" height="790" alt="Screenshot 2025-11-28 152458" src="https://github.com/user-attachments/assets/95dfe6f0-3135-43ac-91d6-75919d62b8cf" />
+<img width="1882" height="701" alt="Screenshot 2025-11-28 152533" src="https://github.com/user-attachments/assets/6a44a20b-deb8-4630-aad4-e914f36776d5" />
