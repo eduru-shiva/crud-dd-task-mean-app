@@ -1,122 +1,167 @@
-🚀 MEAN Stack DevOps Assignment – Discover Dollar
+**Discover Dollar – DevOps Assignment**
+Full-Stack MEAN Application – Containerization, Deployment, CI/CD & Nginx Reverse Proxy
 
-A complete CI/CD + Docker + Nginx + AWS deployment of a full-stack MEAN (MongoDB, Express, Angular, Node.js) application.
+This repository contains the complete implementation of the DevOps assignment provided by Discover Dollar.
+The task includes containerizing a full-stack MEAN application, deploying it on an AWS EC2 Ubuntu VM, configuring CI/CD using GitHub Actions, and exposing the application using Nginx reverse proxy on port 80.
 
-📌 Project Overview
+ **Project Live URL**
 
-This project implements and deploys a CRUD application built using the MEAN stack:
+Frontend UI: http://51.20.181.28
 
-MongoDB – Database
+Backend API: http://51.20.181.28/api
 
-Express.js – Backend API
+MongoDB: running via Docker container
 
-Angular 15 – Frontend UI
-
-Node.js – Application runtime
-
-The project was containerized using Docker, deployed on an AWS EC2 Ubuntu Server, automated using GitHub Actions, and exposed using an Nginx reverse proxy on port 80.
-
-
-Project stracture
+** Project Structure**
 
 crud-dd-task-mean-app/
-├── backend/            # Node.js + Express backend API
+│── backend/
 │   ├── Dockerfile
+│   ├── server.js
 │   ├── app/
-│   ├── package.json
-│   └── server.js
-│
-├── frontend/           # Angular 15 frontend code
+│   │   ├── config/db.config.js
+│   │   ├── routes
+│   │   ├── controllers
+│   │   └── models
+│── frontend/
 │   ├── Dockerfile
 │   ├── angular.json
-│   └── src/
-│
-├── nginx.conf          # Nginx reverse proxy configuration
-├── docker-compose.yml  # Multi-container orchestration
-└── .github/workflows/
-       └── cicd.yml    # GitHub Actions CI/CD pipeline
+│   ├── src/
+│── nginx.conf
+│── docker-compose.yml
+│── .github/workflows/ci-cd.yml
+│── README.md
+
+** Task Requirements Completed**
+
+✔ Setup GitHub Repository
+
+Pushed full project source code
+
+Added Dockerfiles, nginx.conf, and docker-compose.yml
+
+Added GitHub Actions workflow for CI/CD
+
+✔ Containerization & Deployment
+
+Created Dockerfile for backend
+
+Created Dockerfile for frontend
+
+Built and pushed images to Docker Hub
+
+edurushiva1418/mean-backend
+
+edurushiva1418/mean-frontend
+
+Used Docker Compose to deploy full MEAN stack on EC2
+
+Exposed:
+
+Backend → port 8080
+
+Frontend → handled by Nginx
+
+Entire application available on port 80
+
+✔ MongoDB Setup
+
+Used official MongoDB Docker image
+
+Mapped volume mongo-data:/data/db
+
+✔ CI/CD Pipeline
+
+Implemented via GitHub Actions:
+
+On every push to main:
+
+Build backend & frontend Docker images
+
+Push images to Docker Hub
+
+SSH into EC2
+
+Pull latest images
+
+Restart Docker Compose services
+
+✔ Nginx Reverse Proxy
+
+Configured nginx.conf to:
+
+Serve Angular frontend
+
+Proxy /api requests to backend at port 8080
+
+Expose the entire application on port 80
+
+** Screenshots**
+
+✔ Working Frontend UI
+<img width="1162" alt="UI Screenshot" src="https://github.com/user-attachments/assets/d792dce3-9d48-45f4-b3f1-90ece1bf55ac" />
+✔ Docker Images Build & Push
+<img width="1619" alt="Docker Push" src="https://github.com/user-attachments/assets/f7225712-24d5-4a00-9335-474310747bc8" />
+✔ Docker Compose Deployment
+<img width="1503" alt="Docker Compose" src="https://github.com/user-attachments/assets/ec22dc64-efc8-4b1d-9826-b378e52db911" />
+✔ CI/CD Workflow – Successful Execution
+<img width="1907" alt="CI/CD Success" src="https://github.com/user-attachments/assets/524ffd38-f1ae-4ddb-a506-b5d3f9589de2" />
+✔ Nginx & Infrastructure Setup
+<img width="1900" alt="Nginx" src="https://github.com/user-attachments/assets/95dfe6f0-3135-43ac-91d6-75919d62b8cf" />
+✔ Working Backend API Output
+<img width="1882" alt="API Working" src="https://github.com/user-attachments/assets/6a44a20b-deb8-4630-aad4-e914f36776d5" />
+⚙️ How to Deploy – Step-by-Step Guide
+1️⃣ Clone the repository
+git clone https://github.com/eduru-shiva/crud-dd-task-mean-app.git
+cd crud-dd-task-mean-app
+
+2️⃣ Build & Push Docker Images
+
+Backend:
+
+docker build -t edurushiva1418/mean-backend ./backend
+docker push edurushiva1418/mean-backend
 
 
+Frontend:
 
-1. Dockerization
+docker build -t edurushiva1418/mean-frontend ./frontend
+docker push edurushiva1418/mean-frontend
 
-🔹 Backend Dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY . .
-EXPOSE 8080
-CMD ["node", "server.js"]
+3️⃣ Start Application on EC2
+docker compose up -d
 
+4️⃣ Access Application
+http://<EC2_PUBLIC_IP>
 
-🔹 Frontend Dockerfile
-FROM node:18-alpine as build
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm install
-COPY . .
-RUN npm run build --prod
-
-FROM nginx:alpine
-COPY --from=build /app/dist/angular-15-crud /usr/share/nginx/html
+⚙️ CI/CD – GitHub Actions Workflow
+.github/workflows/ci-cd.yml
 
 
-🗄️ 2. Docker Compose Deployment
+Includes:
 
-docker-compose.yml
-services:
-  mongo:
-    image: mongo:6
-    container_name: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+Build backend image
 
-  backend:
-    build: ./backend
-    container_name: backend
-    restart: always
-    environment:
-      MONGO_URL: "mongodb://mongo:27017/dd_db"
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mongo
+Build frontend image
 
-  frontend:
-    build: ./frontend
-    container_name: frontend
-    restart: always
-    depends_on:
-      - backend
+Push to Docker Hub
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: always
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
-      - backend
+SSH into EC2
 
-volumes:
-  mongo-data:
+Pull latest images
 
+Restart Docker Compose
 
-3. Nginx Reverse Proxy
+ Nginx Reverse Proxy Configuration
 
-nginx.conf
+nginx.conf:
+
 server {
     listen 80;
 
     location / {
-        proxy_pass http://frontend:80;
+        root /usr/share/nginx/html;
+        try_files $uri /index.html;
     }
 
     location /api/ {
@@ -124,92 +169,41 @@ server {
     }
 }
 
+ Testing the Application
+Add tutorial via API
+curl -X POST http://51.20.181.28/api/tutorials \
+-H "Content-Type: application/json" \
+-d '{"title":"Test","description":"Hello","published":true}'
 
-✔ Frontend available at → http://<EC2_PUBLIC_IP>/
-✔ Backend API available at → http://<EC2_PUBLIC_IP>/api
+Fetch tutorials
+curl http://51.20.181.28/api/tutorials
 
-☁️ 4. EC2 Deployment Steps
-🔹 Launch Ubuntu EC2 Instance
+🏁 Submission
 
-Ubuntu 22.04
+✔ GitHub Repo:
+https://github.com/eduru-shiva/crud-dd-task-mean-app
 
-t2.medium (recommended)
+✔ EC2 Public IP:
+51.20.181.28
 
-Open ports: 22, 80, 8080, 27017
+✔ Docker Hub Images:
 
-Install Docker + Docker Compose
+https://hub.docker.com/r/edurushiva1418/mean-backend
 
-sudo apt update
-sudo apt install docker.io -y
-sudo usermod -aG docker ubuntu
-newgrp docker
+https://hub.docker.com/r/edurushiva1418/mean-frontend
 
-Deploy containers
+** Completed Successfully**
 
-docker compose up -d --build
+This assignment covers:
 
+Docker
 
-5. CI/CD Pipeline (GitHub Actions)
+Docker Compose
 
-File: .github/workflows/ci-cd.yml
+CI/CD (GitHub Actions)
 
-CI/CD Flow:
+Nginx Reverse Proxy
 
-✔ Build Docker images
-✔ Push to Docker Hub
-✔ SSH into EC2
-✔ Pull latest images
-✔ Restart containers
+MEAN Stack Deployment
 
-🔹 GitHub Action Workflow (Full File)
-
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: Build Backend Image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mean-backend ./backend
-
-      - name: Build Frontend Image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mean-frontend ./frontend
-
-      - name: Push Backend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mean-backend
-
-      - name: Push Frontend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mean-frontend
-
-  deploy-to-ec2:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - name: SSH into EC2 & Deploy
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd crud-dd-task-mean-app
-            docker-compose pull
-            docker-compose down
-            docker-compose up -d
-
-
-6. Screenshots to Include
+AWS EC2 infrastructure setup
